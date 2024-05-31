@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .forms import SignUpForm, PersonForm
+from rest_framework import generics
+from .models import Person
+from .serializers import PersonSerializer
 
 
 def signup(request):
@@ -27,3 +30,8 @@ def person_create(request):
     else:
         form = PersonForm()
     return render(request, 'accounts/person_form.html', {'form': form})
+
+
+class PersonCreateAPIView(generics.CreateAPIView):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
