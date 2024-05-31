@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Person
+from .models import Person, Consumption
 
 
 class SignUpForm(UserCreationForm):
@@ -16,3 +16,17 @@ class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
         fields = ['name', 'weight']
+
+
+class ConsumptionForm(forms.ModelForm):
+    AMOUNTS = [
+        (250, 'Copo pequeno 250ml'),
+        (350, 'Copo médio 350ml'),
+        (500, 'Garrafa média 500ml'),
+    ]
+
+    amount = forms.ChoiceField(choices=AMOUNTS, widget=forms.RadioSelect)
+
+    class Meta:
+        model = Consumption
+        fields = ['amount']
