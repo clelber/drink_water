@@ -5,17 +5,36 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <h2 class="my-4">Consumo do {{ person.name }}</h2>
+        <div class="card">
+          <div class="card-body"><h2 class="my-4">Consumo do {{ person.name }}</h2></div>
+        </div>
+
+        <div class="card">
         <p>Data: {{ date }}</p>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-primary">Incluir Consumo</button>
         </form>
-        <h3 class="my-4">Meta diária: {{ daily_goal }} ml</h3>
-        <h3 class="my-4">Meta restante: {{ remaining_goal }} ml</h3>
-        <h3 class="my-4">Consumo total: {{ total_consumption }} ml</h3>
-        <h3 class="my-4">Consumo total (%): {{ consumption_percentage }}%</h3>
+        </div>
+        <ul>
+            <li>Meta diária: {{ daily_goal }} ml</li>
+            <li>Meta restante: {{ remaining_goal }} ml</li>
+            <li>Consumo total: {{ total_consumption }} ml</li>
+            <li>Consumo total (%): {{ consumption_percentage|floatformat:2 }}%</li>
+        </ul>
+        <div class="alert alert-primary">
+          <strong>Chegou na meta hoje?!</strong>
+        </div>
+        {% if remaining_goal > 0 %}
+        <div class="alert alert-danger">
+          <strong>NÃO!</strong>
+        </div>
+        {% else %}
+        <div class="alert alert-success">
+          <strong>SIM!</strong>
+        </div>
+        {% endif %}
 
     </div>
 </div>

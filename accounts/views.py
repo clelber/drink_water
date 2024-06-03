@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.db import models
+from django.db.models import Sum
 from .forms import SignUpForm, PersonForm, ConsumptionForm
 from rest_framework import generics
 from rest_framework.response import Response
@@ -86,18 +87,18 @@ class ConsumptionAPIView(APIView):
         daily_goal = person.weight * 35
 
         # Calcular a meta já consumida
-        total_consumption = Consumption.objects.filter(person=person).aggregate(total=models.Sum('amount'))['total'] or 0
+        total_consumption = Consumption.objects.filter(person=person).aggregate(total=Sum('amount'))['total'] or 0
 
         # Calcular a meta restante
         remaining_goal = daily_goal - total_consumption
 
         # Calcular a porcentagem da meta já consumida
-        if daily_goal != 0:
-            consumption_percentage = (total_consumption / daily_goal) * 100
-        else:
-            consumption_percentage = 0
+        consumption_percentage = (total_consumption / daily_goal) * 100 if daily_goal != 0 else 0
 
         data = {
+            'id': person.id,
+            'name': person.name,
+            'weight': person.weight,
             'daily_goal': daily_goal,
             'remaining_goal': remaining_goal,
             'consumption_percentage': consumption_percentage,

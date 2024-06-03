@@ -16,6 +16,10 @@ class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
         fields = ['name', 'weight']
+        labels = {
+            'name': 'Nome',
+            'weight': 'Peso'
+        }
 
 
 class ConsumptionForm(forms.ModelForm):
@@ -30,3 +34,6 @@ class ConsumptionForm(forms.ModelForm):
     class Meta:
         model = Consumption
         fields = ['amount']
+        labels = {
+            'amount': 'Quantidades'
+        }

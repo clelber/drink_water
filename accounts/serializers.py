@@ -9,6 +9,9 @@ class PersonSerializer(serializers.ModelSerializer):
 
 
 class ConsumptionSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    weight = serializers.FloatField()
     daily_goal = serializers.FloatField()
     remaining_goal = serializers.FloatField()
     consumption_percentage = serializers.FloatField()
