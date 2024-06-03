@@ -9,6 +9,7 @@ from .models import Person, Consumption
 from .serializers import PersonSerializer, ConsumptionSerializer
 from rest_framework.views import APIView
 from django.utils import timezone
+from django.utils.dateparse import parse_date
 
 
 def signup(request):
@@ -82,17 +83,10 @@ def consumption_view(request, person_id):
 class ConsumptionAPIView(APIView):
     def get(self, request, person_id):
         person = Person.objects.get(id=person_id)
-
-        # Calcular a meta do dia
+        current_date = timezone.now().date()
         daily_goal = person.weight * 35
-
-        # Calcular a meta já consumida
-        total_consumption = Consumption.objects.filter(person=person).aggregate(total=Sum('amount'))['total'] or 0
-
-        # Calcular a meta restante
+        total_consumption = Consumption.objects.filter(person=person, date=current_date).aggregate(total=Sum('amount'))['total'] or 0
         remaining_goal = daily_goal - total_consumption
-
-        # Calcular a porcentagem da meta já consumida
         consumption_percentage = (total_consumption / daily_goal) * 100 if daily_goal != 0 else 0
 
         data = {
@@ -103,7 +97,43 @@ class ConsumptionAPIView(APIView):
             'remaining_goal': remaining_goal,
             'consumption_percentage': consumption_percentage,
             'total_consumption': total_consumption,
+            'date': current_date,
         }
 
         serializer = ConsumptionSerializer(data)
         return Response(serializer.data)
+
+
+class ConsumptionByDateAPIView(APIView):
+    def get(self, request, person_id, date):
+        person = Person.objects.get(id=person_id)
+        date = parse_date(date)
+        daily_consumption = Consumption.objects.filter(person=person, date=date).aggregate(total=Sum('amount'))['total'] or 0
+        daily_goal = person.weight * 35
+        remaining_goal = daily_goal - daily_consumption
+        consumption_percentage = (daily_consumption / daily_goal) * 100 if daily_goal != 0 else 0
+
+        data = {
+            'id': person.id,
+            'name': person.name,
+            'weight': person.weight,
+            'daily_goal': daily_goal,
+            'remaining_goal': remaining_goal,
+            'consumption_percentage': consumption_percentage,
+            'total_consumption': daily_consumption,
+            'date': date,
+        }
+
+        serializer = ConsumptionSerializer(data)
+        return Response(serializer.data)
+
+
+def consumption_details_view(request, person_id):
+    person = Person.objects.get(id=person_id)
+    consumptions = Consumption.objects.filter(person=person).order_by('-date')
+
+    context = {
+        'person': person,
+        'consumptions': consumptions,
+    }
+    return render(request, 'accounts/consumption_details.html', context)

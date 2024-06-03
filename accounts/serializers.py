@@ -16,3 +16,4 @@ class ConsumptionSerializer(serializers.Serializer):
     remaining_goal = serializers.FloatField()
     consumption_percentage = serializers.FloatField()
     total_consumption = serializers.FloatField()
+    date = serializers.DateField()

@@ -9,4 +9,5 @@ urlpatterns = [
     path('api/create/', views.PersonCreateAPIView.as_view(), name='person_create_api'),
     path('consume/<int:person_id>/', views.consumption_view, name='consumption_view'),
     path('api/consumption/<int:person_id>/', views.ConsumptionAPIView.as_view(), name='consumption_api'),
+    path('api/consumption/<int:person_id>/<str:date>/', views.ConsumptionByDateAPIView.as_view(), name='consumption_by_date_api'),
 ]

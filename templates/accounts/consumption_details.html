@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consumption Details</title>
+</head>
+<body>
+    <h1>Consumption Details for {{ person.name }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Amount (ml)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for consumption in consumptions %}
+                <tr>
+                    <td>{{ consumption.date }}</td>
+                    <td>{{ consumption.amount }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'consumption_view' person.id %}"><button>Back</button></a>
+</body>
+</html>
