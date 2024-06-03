@@ -10,4 +10,5 @@ urlpatterns = [
     path('consume/<int:person_id>/', views.consumption_view, name='consumption_view'),
     path('api/consumption/<int:person_id>/', views.ConsumptionAPIView.as_view(), name='consumption_api'),
     path('api/consumption/<int:person_id>/<str:date>/', views.ConsumptionByDateAPIView.as_view(), name='consumption_by_date_api'),
+    path('accounts/consume/details/<int:person_id>/', views.consumption_details_view, name='consumption_details'),
 ]

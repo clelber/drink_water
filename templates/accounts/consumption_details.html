@@ -2,25 +2,43 @@
 <html>
 <head>
     <title>Consumption Details</title>
+    <!-- Incluindo o CSS do Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Consumption Details for {{ person.name }}</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Amount (ml)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for consumption in consumptions %}
+    <div class="container">
+        <h1 class="mt-5 mb-4">Detalhes do consumo para {{ person.name }}</h1>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
                 <tr>
-                    <td>{{ consumption.date }}</td>
-                    <td>{{ consumption.amount }}</td>
+                    <th>Data</th>
+                    <th>Total Consumido (ml)</th>
+                    <th>Meta Diária (ml)</th>
+                    <th>Alcançou a Meta?</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="{% url 'consumption_view' person.id %}"><button>Back</button></a>
+            </thead>
+            <tbody>
+                {% for consumption in detailed_consumptions %}
+                    <tr>
+                        <td>{{ consumption.date }}</td>
+                        <td>{{ consumption.total_consumed }}</td>
+                        <td>{{ consumption.daily_goal }}</td>
+                        <td>
+                            {% if consumption.goal_reached %}
+                                <span class="badge badge-success">SIN</span>
+                            {% else %}
+                                <span class="badge badge-danger">NÃO</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'consumption_view' person.id %}" class="btn btn-primary">Voltar</a>
+    </div>
+    <!-- Incluindo o JavaScript do Bootstrap e dependências -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

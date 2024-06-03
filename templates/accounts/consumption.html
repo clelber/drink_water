@@ -35,7 +35,8 @@
           <strong>SIM!</strong>
         </div>
         {% endif %}
-    <a href="{% url 'consumption_details' person.id %}"><button>View Details</button></a>
+
+    <a href="{% url 'consumption_details' person.id %}" class="btn btn-primary"><button>Ver detalhes</button></a>
     </div>
 </div>
 {% endblock %}
